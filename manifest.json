@@ -8,7 +8,8 @@
     "activeTab"
   ],
   "host_permissions": [
-    "https://news.ycombinator.com/*"
+    "https://news.ycombinator.com/*",
+    "https://api.mymemory.translated.net/*"
   ],
   "content_scripts": [
     {

@@ -17,6 +17,7 @@ chrome.storage.sync.get(['enhanceEnabled', 'translationEnabled'], (result) => {
   
   if (config.translationEnabled) {
     addTranslationButtons();
+    setupCommentObserver();
   }
 });
 
@@ -74,6 +75,38 @@ function addTranslationButtons() {
   });
 }
 
+// Observe DOM changes to handle dynamically loaded comments
+function setupCommentObserver() {
+  const observer = new MutationObserver((mutations) => {
+    // Check if new comments were added
+    let hasNewComments = false;
+    for (const mutation of mutations) {
+      if (mutation.addedNodes.length > 0) {
+        for (const node of mutation.addedNodes) {
+          if (node.nodeType === 1 && (node.classList?.contains('athing') || node.querySelector?.('.commtext'))) {
+            hasNewComments = true;
+            break;
+          }
+        }
+      }
+      if (hasNewComments) break;
+    }
+    
+    if (hasNewComments && config.translationEnabled) {
+      addTranslationButtons();
+    }
+  });
+  
+  // Observe the main content area for changes
+  const targetNode = document.querySelector('body');
+  if (targetNode) {
+    observer.observe(targetNode, {
+      childList: true,
+      subtree: true
+    });
+  }
+}
+
 // Remove all translation buttons
 function removeTranslationButtons() {
   const buttons = document.querySelectorAll('.hn-translate-btn');
@@ -118,8 +151,10 @@ async function translateComment(commentElement, button) {
   commentElement.parentElement.insertBefore(translationDiv, commentElement.nextSibling);
   
   // Disable button while translating
-  button.disabled = true;
-  button.style.opacity = '0.5';
+  button.classList.add('hn-translate-btn-disabled');
+  const originalText = button.textContent;
+  button.textContent = '...';
+  button.style.pointerEvents = 'none';
   
   try {
     // Use Google Translate API (via MyMemory public API as a fallback)
@@ -138,8 +173,9 @@ async function translateComment(commentElement, button) {
     loadingDiv.textContent = 'Translation failed. Please try again.';
   } finally {
     // Re-enable button
-    button.disabled = false;
-    button.style.opacity = '1';
+    button.classList.remove('hn-translate-btn-disabled');
+    button.textContent = originalText;
+    button.style.pointerEvents = '';
   }
 }
 
@@ -161,26 +197,49 @@ async function translateText(text) {
 // Split text into chunks
 function splitTextIntoChunks(text, maxLength) {
   const chunks = [];
-  const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+  
+  // Split by sentence-like boundaries, but be careful with abbreviations
+  // This regex looks for sentence endings followed by space and capital letter
+  const sentencePattern = /[.!?]+\s+(?=[A-Z])/g;
+  const sentences = text.split(sentencePattern);
   
   let currentChunk = '';
   
   for (const sentence of sentences) {
     if (currentChunk.length + sentence.length <= maxLength) {
-      currentChunk += sentence;
+      currentChunk += sentence + ' ';
     } else {
       if (currentChunk) {
-        chunks.push(currentChunk);
+        chunks.push(currentChunk.trim());
       }
-      currentChunk = sentence;
+      // If single sentence is too long, split by words
+      if (sentence.length > maxLength) {
+        const words = sentence.split(/\s+/);
+        let wordChunk = '';
+        for (const word of words) {
+          if (wordChunk.length + word.length + 1 <= maxLength) {
+            wordChunk += word + ' ';
+          } else {
+            if (wordChunk) {
+              chunks.push(wordChunk.trim());
+            }
+            wordChunk = word + ' ';
+          }
+        }
+        if (wordChunk) {
+          currentChunk = wordChunk;
+        }
+      } else {
+        currentChunk = sentence + ' ';
+      }
     }
   }
   
-  if (currentChunk) {
-    chunks.push(currentChunk);
+  if (currentChunk.trim()) {
+    chunks.push(currentChunk.trim());
   }
   
-  return chunks;
+  return chunks.length > 0 ? chunks : [text];
 }
 
 // Translate a single chunk of text

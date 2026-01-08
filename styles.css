@@ -87,6 +87,11 @@ body.hn-enhanced .comhead {
   color: white;
 }
 
+.hn-translate-btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Better spacing for comments */
 body.hn-enhanced .athing.comtr {
   margin-bottom: 10px !important;
