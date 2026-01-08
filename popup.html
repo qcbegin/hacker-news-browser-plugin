@@ -25,6 +25,14 @@
       background: #f6f6f0;
       border-radius: 6px;
     }
+
+    .setting-group {
+      margin-bottom: 16px;
+    }
+
+    .setting-group:last-child {
+      margin-bottom: 0;
+    }
     
     .setting:last-child {
       margin-bottom: 0;
@@ -35,6 +43,52 @@
       align-items: center;
       cursor: pointer;
       user-select: none;
+    }
+
+    .slider {
+      margin-top: 10px;
+    }
+
+    .slider label {
+      font-size: 12px;
+      color: #444;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .slider input[type="range"] {
+      width: 100%;
+    }
+
+    .field {
+      margin-top: 10px;
+    }
+
+    .field label {
+      font-size: 12px;
+      color: #444;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #d0d0d0;
+      border-radius: 4px;
+      font-size: 12px;
+      box-sizing: border-box;
+    }
+
+    .field small {
+      display: block;
+      margin-top: 6px;
+      font-size: 11px;
+      color: #777;
+      line-height: 1.4;
     }
     
     input[type="checkbox"] {
@@ -96,7 +150,7 @@
       Increase font sizes and improve spacing for better readability
     </div>
   </div>
-  
+
   <div class="setting">
     <label>
       <input type="checkbox" id="translationEnabled" checked>
@@ -104,6 +158,61 @@
     </label>
     <div class="description">
       Add translation buttons to comments. Click "译" to translate comments to Chinese
+    </div>
+    <div class="field">
+      <label for="translationEngine">Translation engine</label>
+      <select id="translationEngine">
+        <option value="mymemory">MyMemory (free)</option>
+        <option value="google">Google Translate API</option>
+        <option value="deepl">DeepL API</option>
+        <option value="youdao">Youdao API</option>
+      </select>
+      <small>Choose an engine and provide the required API credentials.</small>
+    </div>
+    <div class="field" id="googleKeyField">
+      <label for="googleApiKey">Google API key</label>
+      <input type="password" id="googleApiKey" placeholder="AIza...">
+    </div>
+    <div class="field" id="deeplKeyField">
+      <label for="deeplApiKey">DeepL API key</label>
+      <input type="password" id="deeplApiKey" placeholder="DeepL auth key">
+    </div>
+    <div class="field" id="youdaoKeyField">
+      <label for="youdaoAppId">Youdao App ID</label>
+      <input type="text" id="youdaoAppId" placeholder="Youdao App ID">
+    </div>
+    <div class="field" id="youdaoSecretField">
+      <label for="youdaoAppSecret">Youdao App Secret</label>
+      <input type="password" id="youdaoAppSecret" placeholder="Youdao App Secret">
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-group">
+      <div class="description">
+        Reading preferences (applies when Enhanced Readability is enabled)
+      </div>
+      <div class="slider">
+        <label for="fontSize">
+          <span>Font size</span>
+          <span id="fontSizeValue">14px</span>
+        </label>
+        <input type="range" id="fontSize" min="12" max="20" step="1" value="14">
+      </div>
+      <div class="slider">
+        <label for="lineHeight">
+          <span>Line height</span>
+          <span id="lineHeightValue">1.6</span>
+        </label>
+        <input type="range" id="lineHeight" min="1.4" max="2.0" step="0.1" value="1.6">
+      </div>
+      <div class="slider">
+        <label for="commentSpacing">
+          <span>Comment spacing</span>
+          <span id="commentSpacingValue">12px</span>
+        </label>
+        <input type="range" id="commentSpacing" min="8" max="24" step="1" value="12">
+      </div>
     </div>
   </div>
   

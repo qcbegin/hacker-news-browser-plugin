@@ -2,40 +2,45 @@
 
 /* Increase base font size */
 body.hn-enhanced {
-  font-size: 14px !important;
-  line-height: 1.6 !important;
+  font-size: var(--hn-base-font-size, 14px) !important;
+  line-height: var(--hn-line-height, 1.6) !important;
 }
 
 body.hn-enhanced .title,
 body.hn-enhanced .titleline {
-  font-size: 16px !important;
+  font-size: calc(var(--hn-base-font-size, 14px) + 2px) !important;
   line-height: 1.5 !important;
 }
 
 body.hn-enhanced .title a {
-  font-size: 16px !important;
+  font-size: calc(var(--hn-base-font-size, 14px) + 2px) !important;
   font-weight: 500 !important;
 }
 
 body.hn-enhanced .subtext,
 body.hn-enhanced .hnuser,
 body.hn-enhanced .age {
-  font-size: 13px !important;
+  font-size: calc(var(--hn-base-font-size, 14px) - 1px) !important;
 }
 
 body.hn-enhanced .comment {
-  font-size: 14px !important;
-  line-height: 1.7 !important;
-  margin-bottom: 12px !important;
+  font-size: var(--hn-base-font-size, 14px) !important;
+  line-height: var(--hn-line-height, 1.6) !important;
+  margin-bottom: var(--hn-comment-spacing, 12px) !important;
 }
 
 body.hn-enhanced .commtext {
-  font-size: 14px !important;
-  line-height: 1.7 !important;
+  font-size: var(--hn-base-font-size, 14px) !important;
+  line-height: var(--hn-line-height, 1.6) !important;
+  max-width: 80ch;
 }
 
 body.hn-enhanced .comhead {
-  font-size: 12px !important;
+  font-size: calc(var(--hn-base-font-size, 14px) - 2px) !important;
+}
+
+body.hn-enhanced .commtext p {
+  margin: 0 0 calc(var(--hn-comment-spacing, 12px) / 2);
 }
 
 /* Translation styles */
@@ -94,7 +99,7 @@ body.hn-enhanced .comhead {
 
 /* Better spacing for comments */
 body.hn-enhanced .athing.comtr {
-  margin-bottom: 10px !important;
+  margin-bottom: var(--hn-comment-spacing, 12px) !important;
 }
 
 /* Make comment indentation clearer */
