@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>HN Extension Demo</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Basic HN-like styling for demo */
+    body {
+      font-family: Verdana, Geneva, sans-serif;
+      font-size: 10pt;
+      color: #828282;
+      background-color: #f6f6ef;
+      margin: 0;
+      padding: 8px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 16px;
+    }
+    
+    .demo-controls {
+      background: #fffacd;
+      border: 2px solid #ff6600;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    
+    .demo-controls h3 {
+      margin: 0 0 10px 0;
+      color: #ff6600;
+    }
+    
+    .demo-controls button {
+      padding: 8px 16px;
+      margin-right: 10px;
+      background: #ff6600;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    
+    .demo-controls button:hover {
+      background: #cc5200;
+    }
+    
+    .title {
+      margin: 8px 0;
+    }
+    
+    .title a {
+      color: #000;
+      text-decoration: none;
+      font-size: 10pt;
+    }
+    
+    .subtext {
+      font-size: 7pt;
+      color: #828282;
+      margin-bottom: 12px;
+    }
+    
+    .commtext {
+      font-size: 9pt;
+      color: #000;
+      margin: 8px 0;
+    }
+    
+    .comhead {
+      font-size: 8pt;
+      color: #828282;
+      margin: 8px 0 4px 0;
+    }
+    
+    .comment-container {
+      margin: 12px 0;
+      padding: 8px;
+      border-left: 1px solid #ccc;
+    }
+    
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .comparison-panel {
+      border: 2px solid #ddd;
+      padding: 16px;
+      border-radius: 8px;
+    }
+    
+    .comparison-panel h4 {
+      margin: 0 0 12px 0;
+      color: #ff6600;
+      text-align: center;
+    }
+    
+    .comparison-panel.enhanced {
+      border-color: #ff6600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="demo-controls">
+      <h3>🎮 Demo Controls</h3>
+      <button onclick="toggleEnhancement()">Toggle Enhancement</button>
+      <button onclick="addDemoTranslation()">Show Translation Demo</button>
+      <p style="margin: 8px 0 0 0; font-size: 12px;">
+        This demo shows how the extension improves readability on Hacker News.
+      </p>
+    </div>
+    
+    <h2 style="color: #ff6600; margin-bottom: 20px;">Hacker News Page Example</h2>
+    
+    <div class="title">
+      <a href="#">Ask HN: What are you working on?</a>
+    </div>
+    <div class="subtext">
+      123 points by user123 2 hours ago | 45 comments
+    </div>
+    
+    <div class="comment-container">
+      <div class="comhead">
+        commenter1 3 hours ago
+      </div>
+      <div class="commtext" id="comment1">
+        I'm working on a new browser extension that helps improve the reading experience on various websites. The main challenge has been making it work across different sites with their unique layouts. It's been a great learning experience!
+      </div>
+    </div>
+    
+    <div class="comment-container">
+      <div class="comhead">
+        commenter2 2 hours ago
+      </div>
+      <div class="commtext" id="comment2">
+        That sounds interesting! I've been working on a similar project. One thing I found helpful was using modern CSS features like CSS Grid and Flexbox to handle responsive layouts. Have you considered using a design system?
+      </div>
+    </div>
+    
+    <div class="comment-container">
+      <div class="comhead">
+        commenter3 1 hour ago
+      </div>
+      <div class="commtext" id="comment3">
+        The key to good browser extensions is to keep them lightweight and respect user privacy. Make sure you're only requesting the permissions you absolutely need. Users really appreciate extensions that are transparent about what they do with their data.
+      </div>
+    </div>
+    
+    <hr style="margin: 40px 0; border: none; border-top: 2px solid #ff6600;">
+    
+    <h2 style="color: #ff6600; margin-bottom: 20px;">Before & After Comparison</h2>
+    
+    <div class="comparison">
+      <div class="comparison-panel">
+        <h4>❌ Before (Default HN)</h4>
+        <div style="font-size: 9pt; line-height: 1.2;">
+          <p>This is how Hacker News looks by default. The font is quite small (9-10pt) and the line spacing is tight, which can make it harder to read for extended periods.</p>
+          <p>Comments are even smaller at 8pt, making long discussion threads challenging to follow.</p>
+        </div>
+      </div>
+      
+      <div class="comparison-panel enhanced">
+        <h4>✅ After (Enhanced)</h4>
+        <div style="font-size: 14px; line-height: 1.7;">
+          <p>With the extension enabled, fonts are increased to 14px with better line spacing (1.7). This significantly improves readability!</p>
+          <p>Comments are also larger and easier to read, making it more pleasant to follow discussions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Demo script
+    function toggleEnhancement() {
+      document.body.classList.toggle('hn-enhanced');
+      
+      // Add translate buttons if enhanced
+      if (document.body.classList.contains('hn-enhanced')) {
+        addTranslateButtons();
+      } else {
+        removeTranslateButtons();
+      }
+    }
+    
+    function addTranslateButtons() {
+      const comheads = document.querySelectorAll('.comhead');
+      comheads.forEach(comhead => {
+        if (!comhead.querySelector('.hn-translate-btn')) {
+          const btn = document.createElement('span');
+          btn.className = 'hn-translate-btn';
+          btn.textContent = '译';
+          btn.title = 'Translate to Chinese';
+          btn.onclick = function() {
+            const comment = comhead.nextElementSibling;
+            showDemoTranslation(comment);
+          };
+          comhead.appendChild(btn);
+        }
+      });
+    }
+    
+    function removeTranslateButtons() {
+      document.querySelectorAll('.hn-translate-btn').forEach(btn => btn.remove());
+      document.querySelectorAll('.hn-translation').forEach(trans => trans.remove());
+    }
+    
+    function showDemoTranslation(commentElement) {
+      // Toggle existing translation
+      const existing = commentElement.parentElement.querySelector('.hn-translation');
+      if (existing) {
+        existing.remove();
+        return;
+      }
+      
+      // Create demo translation
+      const translationDiv = document.createElement('div');
+      translationDiv.className = 'hn-translation';
+      
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'hn-translation-header';
+      headerDiv.textContent = '中文翻译:';
+      translationDiv.appendChild(headerDiv);
+      
+      const textDiv = document.createElement('div');
+      
+      // Demo Chinese translations
+      const translations = {
+        'comment1': '我正在开发一个新的浏览器扩展，帮助改善各种网站的阅读体验。主要挑战是让它在不同网站及其独特布局上工作。这是一次很好的学习经历！',
+        'comment2': '听起来很有趣！我一直在做一个类似的项目。我发现有用的一件事是使用现代CSS功能，如CSS Grid和Flexbox来处理响应式布局。你考虑过使用设计系统吗？',
+        'comment3': '好的浏览器扩展的关键是保持轻量级并尊重用户隐私。确保你只请求绝对需要的权限。用户真的很欣赏那些对他们的数据处理透明的扩展。'
+      };
+      
+      const commentId = commentElement.id;
+      textDiv.textContent = translations[commentId] || '这是示例中文翻译。实际扩展会使用翻译API来翻译真实内容。';
+      translationDiv.appendChild(textDiv);
+      
+      commentElement.parentElement.insertBefore(translationDiv, commentElement.nextSibling);
+    }
+    
+    function addDemoTranslation() {
+      document.body.classList.add('hn-enhanced');
+      addTranslateButtons();
+      
+      // Auto-translate first comment
+      setTimeout(() => {
+        const firstComment = document.getElementById('comment1');
+        if (firstComment) {
+          showDemoTranslation(firstComment);
+        }
+      }, 300);
+    }
+    
+    // Start with enhancement enabled
+    document.body.classList.add('hn-enhanced');
+    addTranslateButtons();
+  </script>
+</body>
+</html>
